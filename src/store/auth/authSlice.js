@@ -11,11 +11,21 @@ const initialState = {
 
 export const authSlice = createSlice({
   name: "auth",
-  initialState,
+  initialState: { ...initialState },
   reducers: {
-    login: (state, action) => {},
-    logout: (state, action) => {},
-    checkingCredentials: (state, action) => {},
+    login: (state, { payload }) => {
+      return { ...payload, status: "authenticated", errorMessage: null };
+    },
+    logout: (_, { payload }) => {
+      console.log(payload);
+      return {
+        ...initialState,
+        errorMessage: payload.errorMessage,
+      };
+    },
+    checkingCredentials: (state) => {
+      state.status = "checking";
+    },
   },
 });
 
