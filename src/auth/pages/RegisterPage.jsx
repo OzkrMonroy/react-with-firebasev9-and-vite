@@ -1,7 +1,16 @@
 import { Link as RouterLink } from "react-router-dom";
-import { Button, Grid, Link, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  Button,
+  Grid,
+  Link,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { AuthLayout } from "../layout/AuthLayout";
 import { useForm } from "../../hooks";
+import { useDispatch, useSelector } from "react-redux";
+import { onSignupWithEmailAndPassword } from "../../store/auth";
 
 const formValidations = {
   email: [(value) => value.includes("@"), "El email debe de contener una @"],
@@ -13,6 +22,9 @@ const formValidations = {
 };
 
 export const RegisterPage = () => {
+  const dispatch = useDispatch();
+  const { errorMessage } = useSelector((state) => state.auth);
+
   const {
     name,
     email,
@@ -21,6 +33,7 @@ export const RegisterPage = () => {
     emailValid,
     passwordValid,
     formChanged,
+    isFormValid,
     onInputChange,
   } = useForm(
     {
@@ -31,21 +44,17 @@ export const RegisterPage = () => {
     formValidations
   );
 
-  console.log({
-    nameValid,
-    emailValid,
-    passwordValid,
-  });
-
   const onSubmit = (e) => {
     e.preventDefault();
-    setformChanged(true);
+
+    if (!isFormValid) return;
+    dispatch(onSignupWithEmailAndPassword(email, password, name));
   };
 
   return (
     <AuthLayout title="Register">
       <form onSubmit={onSubmit}>
-        <Grid container sx={{ mb: 5 }}>
+        <Grid container sx={{ mb: 3 }}>
           <Grid item xs={12} sx={{ mb: 3 }}>
             <TextField
               label="Full name"
@@ -85,6 +94,14 @@ export const RegisterPage = () => {
         </Grid>
 
         <Grid container spacing={2} sx={{ mb: 2 }}>
+          <Grid
+            item
+            xs={12}
+            sx={{ mb: 2 }}
+            display={!!errorMessage ? "" : "none"}
+          >
+            <Alert severity="error">{errorMessage}</Alert>
+          </Grid>
           <Grid item xs={12}>
             <Button type="submit" variant="contained" fullWidth>
               Create account

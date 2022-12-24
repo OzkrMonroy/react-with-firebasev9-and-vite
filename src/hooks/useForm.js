@@ -22,8 +22,6 @@ export const useForm = (initialForm = {}, formValidations = {}) => {
 
     for (const formField of Object.keys(formValidations)) {
       const [fn, errorMessage = "Campo no válido"] = formValidations[formField];
-
-      console.log(formValidations[formField]);
       formCheckedValues[`${formField}Valid`] = fn(formState[formField])
         ? null
         : errorMessage;

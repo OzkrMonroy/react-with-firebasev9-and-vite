@@ -1,4 +1,8 @@
-import { signInWithGoogle } from "../../firebase/config";
+import {
+  signInWithGoogle,
+  signUpWithEmailAndPassword,
+  updateUserProfile,
+} from "../../firebase/config";
 import { checkingCredentials, login, logout } from "./";
 
 export const checkingAuthentication = (email, password) => {
@@ -14,7 +18,20 @@ export const onGoogleSignIn = () => async (dispatch) => {
     const { displayName, email, photoURL, uid } = user;
     dispatch(login({ displayName, email, photoURL, uid }));
   } catch (error) {
-    console.log({ error });
     dispatch(logout({ errorMessage: error.message }));
   }
 };
+
+export const onSignupWithEmailAndPassword =
+  (email, password, displayName) => async (dispatch) => {
+    dispatch(checkingCredentials());
+    try {
+      const { user } = await signUpWithEmailAndPassword(email, password);
+      const { uid, photoURL } = user;
+      await updateUserProfile(user, displayName);
+
+      dispatch(login({ uid, photoURL, email, displayName }));
+    } catch (error) {
+      dispatch(logout({ errorMessage: error.message }));
+    }
+  };

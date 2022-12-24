@@ -13,7 +13,7 @@ export const authSlice = createSlice({
   name: "auth",
   initialState: { ...initialState },
   reducers: {
-    login: (state, { payload }) => {
+    login: (_, { payload }) => {
       return { ...payload, status: "authenticated", errorMessage: null };
     },
     logout: (_, { payload }) => {
