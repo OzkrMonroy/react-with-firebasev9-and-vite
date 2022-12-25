@@ -17,10 +17,9 @@ export const authSlice = createSlice({
       return { ...payload, status: "authenticated", errorMessage: null };
     },
     logout: (_, { payload }) => {
-      console.log(payload);
       return {
         ...initialState,
-        errorMessage: payload.errorMessage,
+        errorMessage: payload?.errorMessage,
       };
     },
     checkingCredentials: (state) => {

@@ -1,5 +1,7 @@
 import {
+  checkUserSession,
   signInWithGoogle,
+  signOutUser,
   signUpWithEmailAndPassword,
   singInWithEmailAndPassword,
   updateUserProfile,
@@ -9,6 +11,14 @@ import { checkingCredentials, login, logout } from "./";
 export const checkingAuthentication = () => {
   return async (dispatch) => {
     dispatch(checkingCredentials());
+    checkUserSession((user) => {
+      if (user?.uid) {
+        const { displayName, email, photoURL, uid } = user;
+        dispatch(login({ displayName, email, photoURL, uid }));
+        return;
+      }
+      dispatch(logout());
+    });
   };
 };
 
@@ -48,3 +58,12 @@ export const onSignInWithEmailAndPassword =
       dispatch(logout({ errorMessage: error.message }));
     }
   };
+
+export const onLogoutAction = () => async (dispatch) => {
+  try {
+    await signOutUser();
+    dispatch(logout());
+  } catch (error) {
+    console.log("Error to execute logout", error);
+  }
+};
