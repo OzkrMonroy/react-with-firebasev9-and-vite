@@ -6,6 +6,7 @@ import {
   singInWithEmailAndPassword,
   updateUserProfile,
 } from "../../firebase/config";
+import { loadNotesAction } from "../journal";
 import { checkingCredentials, login, logout } from "./";
 
 export const checkingAuthentication = () => {
@@ -15,6 +16,7 @@ export const checkingAuthentication = () => {
       if (user?.uid) {
         const { displayName, email, photoURL, uid } = user;
         dispatch(login({ displayName, email, photoURL, uid }));
+        dispatch(loadNotesAction());
         return;
       }
       dispatch(logout());

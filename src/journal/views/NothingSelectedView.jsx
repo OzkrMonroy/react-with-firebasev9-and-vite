@@ -1,4 +1,4 @@
-import { StartOutlined } from "@mui/icons-material";
+import { StarOutlined } from "@mui/icons-material";
 import { Grid, Typography } from "@mui/material";
 
 export const NothingSelectedView = () => {
@@ -17,7 +17,7 @@ export const NothingSelectedView = () => {
       }}
     >
       <Grid item xs={12}>
-        <StartOutlined sx={{ fontSize: 100, color: "white" }} />
+        <StarOutlined sx={{ fontSize: 100, color: "white" }} />
       </Grid>
       <Grid item xs={12}>
         <Typography variant="h5" color="white">
