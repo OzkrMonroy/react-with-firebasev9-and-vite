@@ -25,7 +25,7 @@ export const SideBar = ({ drawerWidth = 240 }) => {
           </Typography>
         </Toolbar>
         <Divider />
-        <DrawerList data={["January", "February", "March", "April"]} />
+        <DrawerList />
       </Drawer>
     </Box>
   );
