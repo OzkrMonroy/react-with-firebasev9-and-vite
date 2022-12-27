@@ -1,7 +1,13 @@
-import { createANote, getNotes, updateNote } from "../../firebase/config";
+import {
+  createANote,
+  deleteNote,
+  getNotes,
+  updateNote,
+} from "../../firebase/config";
 import { uploadFile } from "../../journal/helpers/uploadFile";
 import {
   addNewEmptyNote,
+  deleteNoteById,
   setActiveNote,
   setNotes,
   setSaving,
@@ -74,3 +80,15 @@ export const uploadFilesAction =
       console.log("An error ocurred while saving the note images");
     }
   };
+
+export const deleteNoteAction = () => async (dispatch, getState) => {
+  dispatch(setSaving());
+  try {
+    const uid = getState().auth.uid;
+    const { id } = getState().journal.activeNote;
+    await deleteNote(uid, id);
+    dispatch(deleteNoteById(id));
+  } catch (error) {
+    console.log("An error occurred while deleting a note", error);
+  }
+};
