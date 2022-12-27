@@ -21,6 +21,12 @@ const formValidations = {
   name: [(value) => value.length > 1, "El nombre es obligatorio"],
 };
 
+const formData = {
+  name: "Test vite",
+  email: "test20@test.com",
+  password: "1234567",
+};
+
 export const RegisterPage = () => {
   const dispatch = useDispatch();
   const { errorMessage } = useSelector((state) => state.auth);
@@ -35,14 +41,7 @@ export const RegisterPage = () => {
     formChanged,
     isFormValid,
     onInputChange,
-  } = useForm(
-    {
-      name: "Test vite",
-      email: "test20@test.com",
-      password: "1234567",
-    },
-    formValidations
-  );
+  } = useForm(formData, formValidations);
 
   const onSubmit = (e) => {
     e.preventDefault();

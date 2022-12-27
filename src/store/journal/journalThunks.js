@@ -1,9 +1,10 @@
-import { createANote, getNotes } from "../../firebase/config";
+import { createANote, getNotes, updateNote } from "../../firebase/config";
 import {
   addNewEmptyNote,
   setActiveNote,
   setNotes,
   setSaving,
+  updateLocalNote,
 } from "./journalSlice";
 
 export const createNoteAction = () => async (dispatch, getState) => {
@@ -16,6 +17,7 @@ export const createNoteAction = () => async (dispatch, getState) => {
     title: "",
     body: "",
     date: new Date().getTime(),
+    imageUrls: [],
   };
 
   try {
@@ -35,5 +37,19 @@ export const loadNotesAction = () => async (dispatch, getState) => {
     dispatch(setNotes(notes));
   } catch (error) {
     console.log("An error ocurred while getting the notes", error);
+  }
+};
+
+export const saveNoteAction = (note) => async (dispatch, getState) => {
+  try {
+    dispatch(setSaving());
+    const uid = getState().auth.uid;
+    const noteToFirestore = { ...note };
+    delete noteToFirestore.id;
+    await updateNote(uid, noteToFirestore, note.id);
+    dispatch(updateLocalNote({ ...note }));
+    dispatch(setActiveNote({ ...note }));
+  } catch (error) {
+    console.log("An error ocurred while saving the note", error);
   }
 };

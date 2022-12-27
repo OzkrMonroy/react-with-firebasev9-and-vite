@@ -13,14 +13,16 @@ import { AuthLayout } from "../layout/AuthLayout";
 import { useForm } from "../../hooks";
 import { onGoogleSignIn, onSignInWithEmailAndPassword } from "../../store/auth";
 
+const initialForm = {
+  email: "test20@test.com",
+  password: "1234567",
+};
+
 export const LoginPage = () => {
   const dispatch = useDispatch();
   const { errorMessage } = useSelector((state) => state.auth);
 
-  const { email, password, onInputChange } = useForm({
-    email: "test20@test.com",
-    password: "1234567",
-  });
+  const { email, password, onInputChange } = useForm(initialForm);
 
   const onSubmit = (e) => {
     e.preventDefault();
