@@ -1,17 +1,40 @@
-import { SaveOutlined } from "@mui/icons-material";
-import { Button, Grid, TextField, Typography } from "@mui/material";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { SaveOutlined, UploadFileOutlined } from "@mui/icons-material";
+import { Button, Grid, IconButton, TextField, Typography } from "@mui/material";
+import Swal from "sweetalert2";
+import "sweetalert2/dist/sweetalert2.css";
+
 import { useForm } from "../../hooks";
-import { saveNoteAction } from "../../store/journal";
+import { saveNoteAction, uploadFilesAction } from "../../store/journal";
 import { ImageGallery } from "../components";
 
 export const NoteView = () => {
   const dispatch = useDispatch();
-  const { activeNote } = useSelector((state) => state.journal);
+  const { activeNote, messageSaved, isSaving } = useSelector(
+    (state) => state.journal
+  );
   const { title, body, date, onInputChange, formState } = useForm(activeNote);
+  const inputRef = useRef();
+
+  console.log({ messageSaved });
+  useEffect(() => {
+    console.log({ messageSaved });
+    if (messageSaved.trim().length > 0) {
+      Swal.fire("Updated note", messageSaved, "success");
+    }
+  }, [messageSaved]);
 
   const onSaveNote = () => {
+    if (isSaving) return;
     dispatch(saveNoteAction({ ...formState }));
+  };
+
+  const onFileChange = ({ target }) => {
+    const files = target.files || [];
+
+    if (files.length === 0) return;
+    dispatch(uploadFilesAction({ ...formState }, files));
   };
 
   return (
@@ -28,7 +51,28 @@ export const NoteView = () => {
         </Typography>
       </Grid>
       <Grid item>
-        <Button color="primary" sx={{ padding: 2 }} onClick={onSaveNote}>
+        <input
+          type="file"
+          multiple
+          onChange={onFileChange}
+          hidden
+          ref={inputRef}
+        />
+        <IconButton
+          disabled={isSaving}
+          color="primary"
+          onClick={() => {
+            inputRef.current.click();
+          }}
+        >
+          <UploadFileOutlined />
+        </IconButton>
+        <Button
+          color="primary"
+          sx={{ padding: 2 }}
+          onClick={onSaveNote}
+          disabled={isSaving}
+        >
           <SaveOutlined sx={{ fontSize: 30, mr: 1 }} />
           Save
         </Button>
@@ -50,7 +94,7 @@ export const NoteView = () => {
           variant="filled"
           fullWidth
           multiline
-          placeholder="What happend today?"
+          placeholder="What happened today?"
           minRows={5}
           name="body"
           value={body}

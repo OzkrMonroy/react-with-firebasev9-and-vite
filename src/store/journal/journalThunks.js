@@ -1,4 +1,5 @@
 import { createANote, getNotes, updateNote } from "../../firebase/config";
+import { uploadFile } from "../../journal/helpers/uploadFile";
 import {
   addNewEmptyNote,
   setActiveNote,
@@ -53,3 +54,23 @@ export const saveNoteAction = (note) => async (dispatch, getState) => {
     console.log("An error ocurred while saving the note", error);
   }
 };
+
+export const uploadFilesAction =
+  (note, files = []) =>
+  async (dispatch) => {
+    try {
+      dispatch(setSaving());
+      const uploadFilesPromises = [];
+      for (const file of files) {
+        uploadFilesPromises.push(uploadFile(file));
+      }
+
+      const imageUrls = await Promise.all(uploadFilesPromises);
+      const oldUrls = note.imageUrls || [];
+      const newNote = { ...note, imageUrls: [...oldUrls, ...imageUrls] };
+
+      dispatch(saveNoteAction(newNote));
+    } catch (error) {
+      console.log("An error ocurred while saving the note images");
+    }
+  };
