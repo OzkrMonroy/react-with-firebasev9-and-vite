@@ -6,7 +6,7 @@ import {
   singInWithEmailAndPassword,
   updateUserProfile,
 } from "../../firebase/config";
-import { loadNotesAction } from "../journal";
+import { clearNotes, loadNotesAction } from "../journal";
 import { checkingCredentials, login, logout } from "./";
 
 export const checkingAuthentication = () => {
@@ -65,6 +65,7 @@ export const onLogoutAction = () => async (dispatch) => {
   try {
     await signOutUser();
     dispatch(logout());
+    dispatch(clearNotes());
   } catch (error) {
     console.log("Error to execute logout", error);
   }

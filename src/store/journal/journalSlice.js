@@ -37,7 +37,11 @@ export const journalSlice = createSlice({
       state.messageSaved = `${payload.title} has been updated successfully`;
     },
     deleteNoteById: (state, action) => {},
-    clearNotes: (state) => {},
+    clearNotes: () => {
+      return {
+        ...initialState,
+      };
+    },
   },
 });
 
