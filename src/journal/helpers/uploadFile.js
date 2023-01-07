@@ -1,5 +1,11 @@
+import { getEnvironments } from "./getEnvironments";
+
 export const uploadFile = async (file) => {
-  const url = import.meta.env.VITE_CLOUDINARY_URL;
+  if (!file) return null;
+
+  const env = getEnvironments();
+  const url = env.VITE_CLOUDINARY_URL;
+
   const formData = new FormData();
   formData.append("upload_preset", "react-journal");
   formData.append("file", file);
@@ -9,8 +15,9 @@ export const uploadFile = async (file) => {
       const cloudResp = await resp.json();
       return cloudResp.secure_url;
     }
-    throw await resp.json();
+    return null;
   } catch (error) {
     console.log("Upload error", error);
+    return null;
   }
 };
