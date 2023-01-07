@@ -9,6 +9,12 @@ import {
 import { clearNotes, loadNotesAction } from "../journal";
 import { checkingCredentials, login, logout } from "./";
 
+export const checkingCredentialsAction = async () => {
+  return async (dispatch) => {
+    dispatch(checkingCredentials());
+  };
+};
+
 export const checkingAuthentication = () => {
   return async (dispatch) => {
     dispatch(checkingCredentials());

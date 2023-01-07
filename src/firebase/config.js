@@ -23,7 +23,6 @@ import {
 import { getEnvironments } from "../journal/helpers";
 
 const env = getEnvironments();
-console.log({ env });
 const firebaseConfig = {
   apiKey: env.VITE_FIREBASE_API_KEY,
   authDomain: env.VITE_FIREBASE_AUTH_DOMAIN,
