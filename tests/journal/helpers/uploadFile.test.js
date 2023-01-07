@@ -8,7 +8,7 @@ cloudinary.config({
   secure: true,
 });
 
-xdescribe("UploadFile tests", () => {
+describe("UploadFile tests", () => {
   test("should upload the file", async () => {
     const resp = await fetch(
       "https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455__340.jpg"
@@ -17,7 +17,6 @@ xdescribe("UploadFile tests", () => {
     const file = new File([blob], "test.jpg");
 
     const url = await uploadFile(file);
-    console.log({ url });
     expect(typeof url).toBe("string");
 
     const segments = url.split("/");
@@ -25,7 +24,7 @@ xdescribe("UploadFile tests", () => {
 
     const { deleted } = await cloudinary.api.delete_resources(imageId);
     expect(deleted).toEqual({ [imageId]: "deleted" });
-  }, 6000);
+  }, 10000);
 
   test("should return an error", async () => {
     const file = new File([], "test.jpg");
