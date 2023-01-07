@@ -86,3 +86,12 @@ export const getNoteForTesting = (ref) => {
   const docRef = doc(db, ref);
   return getDoc(docRef);
 };
+
+export const deleteAllDBNotes = async (uid) => {
+  const collectionRef = collection(db, `${uid}/journal/notes`);
+  const docs = await getDocs(collectionRef);
+
+  const deletePromises = [];
+  docs.forEach((doc) => deletePromises.push(deleteDoc(doc.ref)));
+  await Promise.all(deletePromises);
+};
